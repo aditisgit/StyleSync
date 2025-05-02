@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StyleSync | Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #FAFAFA;  /* Misty White */
+            color: #2F2F2F;  /* Cool Charcoal */
+        }
+
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure the video is behind other elements */
+            object-fit: cover; /* Ensure the video covers the entire screen */
+            filter: none;
+            background-color: black; /* Fallback background color */
+        }
+
+        .navbar {
+            background-color: rgba(47, 47, 47, 0.6); /* Semi-transparent navbar */
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            color: #7FB3D5;  /* Sky Blue */
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: #FAFAFA;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #F7CAC9;  /* Blush Pink */
+        }
+
+        .form-section {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        form {
+            display: inline-block;
+            text-align: left;
+            background-color: #D8D5DB; /* Transparent background */
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(47, 47, 47, 0.3); /* Subtle shadow for visibility */
+            max-width: 400px;
+            width: 100%;
+            opacity: 0.9; /* Slightly transparent */
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #000000; /* White text for better contrast */
+        }
+
+        form select, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid #D8D5DB;
+            font-size: 14px;
+        }
+
+        form button {
+            background-color: #7FB3D5;  /* Sky Blue */
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #5C9DBF;
+        }
+
+        h2 {
+            color: #FAFAFA; /* White text for better contrast */
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop class="video-bg">
+        <source src="{{ url_for('static', filename='videos/Vid2_styleSync.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <nav class="navbar">
+        <div class="logo">StyleSync</div>
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/recommendations">Recommendations</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section class="form-section">
+        <h2>Get Outfit Recommendations</h2>
+
+        <form method="POST" action="/get-recommendations">
+            <label for="gender">Gender:</label>
+            <select name="gender" id="gender" required>
+                <option value="">--Select--</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="height">Height:</label>
+            <select name="height" id="height" required>
+                <option value="">--Select--</option>
+                <option value="Short">Short</option>
+                <option value="Medium">Medium</option>
+                <option value="Tall">Tall</option>
+            </select>
+
+            <label for="weight">Weight:</label>
+            <select name="weight" id="weight" required>
+                <option value="">--Select--</option>
+                <option value="Underweight">Underweight</option>
+                <option value="Normal">Normal</option>
+                <option value="Overweight">Overweight</option>
+            </select>
+
+            <label for="skintone">Skin Tone:</label>
+            <select name="skintone" id="skintone" required>
+                <option value="">--Select--</option>
+                <option value="Fair">Fair</option>
+                <option value="Medium">Medium</option>
+                <option value="Olive">Olive</option>
+                <option value="Dark">Dark</option>
+            </select>
+
+            <label for="bodytype">Body Type:</label>
+            <select name="bodytype" id="bodytype" required>
+                <option value="">--Select--</option>
+                <option value="Ectomorph">Ectomorph</option>
+                <option value="Mesomorph">Mesomorph</option>
+                <option value="Endomorph">Endomorph</option>
+                <option value="Hourglass">Hourglass</option>
+                <option value="Pear">Pear</option>
+                <option value="Apple">Apple</option>
+            </select>
+
+            <label for="aesthetic">Aesthetic:</label>
+            <select name="aesthetic" id="aesthetic" required>
+                <option value="">--Select--</option>
+                <option value="Minimalist">Minimalist</option>
+                <option value="Boho">Boho</option>
+                <option value="Chic">Chic</option>
+                <option value="Grunge">Grunge</option>
+            </select>
+
+            <label for="occasion">Occasion:</label>
+            <select name="occasion" id="occasion" required>
+                <option value="">--Select--</option>
+                <option value="Casual">Casual</option>
+                <option value="Formal">Formal</option>
+                <option value="Ethnic">Ethnic</option>
+                <option value="Party">Party</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+</body>
+</html>
