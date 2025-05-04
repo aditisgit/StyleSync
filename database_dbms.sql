@@ -512,7 +512,18 @@ INSERT INTO ClothingItems (ItemType, ItemName, Color, AestheticID, OccasionID, S
 SET foreign_key_checks = 1;
 
 select *
-from ClothingItems;
+from OUTFITRECOMMENDATIONS;
+
+CREATE TABLE UserCredentials (
+    CredentialID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT,
+    FullName VARCHAR(100),
+    Email VARCHAR(100) UNIQUE,
+    Password VARCHAR(255),
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
 
 
 
