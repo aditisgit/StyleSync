@@ -1,0 +1,574 @@
+use StyleSync;
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY AUTO_INCREMENT,
+    Gender VARCHAR(10),
+    Height VARCHAR(20),
+    Weight VARCHAR(20),
+    SkinTone VARCHAR(50),
+    BodyType VARCHAR(50),
+    PreferredAestheticID INT,
+    FOREIGN KEY (PreferredAestheticID) REFERENCES Aesthetics(AestheticID)
+);
+
+CREATE TABLE Aesthetics (
+    AestheticID INT PRIMARY KEY AUTO_INCREMENT,
+    AestheticName VARCHAR(100)
+);
+
+CREATE TABLE Occasions (
+    OccasionID INT PRIMARY KEY AUTO_INCREMENT,
+    OccasionName VARCHAR(100)
+);
+
+CREATE TABLE ClothingItems (
+    ItemID INT PRIMARY KEY AUTO_INCREMENT,
+    ItemType VARCHAR(50),           
+    ItemName VARCHAR(100),          
+    Color VARCHAR(30),
+    AestheticID INT,                
+    SuitableGender VARCHAR(20),     
+    FOREIGN KEY (AestheticID) REFERENCES Aesthetics(AestheticID)
+);
+
+CREATE TABLE OutfitRecommendations (
+    RecommendationID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID INT,
+    OccasionID INT,
+    TopwearID INT,
+    BottomwearID INT,
+    FootwearID INT,
+    AccessoryID INT,
+    AestheticID INT,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (OccasionID) REFERENCES Occasions(OccasionID),
+    FOREIGN KEY (TopwearID) REFERENCES ClothingItems(ItemID),
+    FOREIGN KEY (BottomwearID) REFERENCES ClothingItems(ItemID),
+    FOREIGN KEY (FootwearID) REFERENCES ClothingItems(ItemID),
+    FOREIGN KEY (AccessoryID) REFERENCES ClothingItems(ItemID),
+    FOREIGN KEY (AestheticID) REFERENCES Aesthetics(AestheticID)
+);
+
+INSERT INTO Aesthetics (AestheticName) VALUES
+('Chic'),
+('Casual'),
+('Sporty');
+
+INSERT INTO Occasions (OccasionName) VALUES
+('Party'),
+('Work'),
+('Casual');
+
+
+UPDATE Aesthetics SET AestheticName = 'Soft girl (pastel)' WHERE AestheticID = 1;
+UPDATE Aesthetics SET AestheticName = 'Old money (chic)' WHERE AestheticID = 2;
+UPDATE Aesthetics SET AestheticName = 'Streetstyle' WHERE AestheticID = 3;
+
+select *
+from Aesthetics;
+
+INSERT INTO Occasions (OccasionName) VALUES
+('Ethnic');
+
+ALTER TABLE Users
+ADD COLUMN OccasionID INT;
+
+ALTER TABLE ClothingItems
+ADD COLUMN OccasionID INT;
+
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE Users;
+SET FOREIGN_KEY_CHECKS = 1;
+
+select *
+from Users;
+
+UPDATE Users SET OccasionID = 1 WHERE UserID = 1;
+UPDATE Users SET OccasionID = 2 WHERE UserID = 2;  
+UPDATE Users SET OccasionID = 3 WHERE UserID = 3;
+UPDATE Users SET OccasionID = 4 WHERE UserID = 4;
+
+UPDATE ClothingItems SET OccasionID = 1 WHERE ItemID = 1;
+UPDATE ClothingItems SET OccasionID = 2 WHERE ItemID = 2;
+UPDATE ClothingItems SET OccasionID = 3 WHERE ItemID = 3; 
+UPDATE ClothingItems SET OccasionID = 4 WHERE ItemID = 4; 
+
+ALTER TABLE Users
+ADD CONSTRAINT fk_user_occasion
+FOREIGN KEY (OccasionID) REFERENCES Occasion(OccasionID);
+
+SHOW TABLES;
+
+ALTER TABLE Users
+ADD CONSTRAINT fk_user_occasion
+FOREIGN KEY (OccasionID) REFERENCES Occasions(OccasionID);
+
+ALTER TABLE ClothingItems
+ADD CONSTRAINT fk_clothingitems_occasion
+FOREIGN KEY (OccasionID) REFERENCES Occasions(OccasionID);
+
+ 
+ select *
+ from Aesthetics;
+ 
+ -- Topwear (Including Dresses)
+INSERT INTO ClothingItems (ItemType, ItemName, Color, AestheticID, OccasionID, SuitableGender) VALUES
+('Topwear', 'Satin Dress', 'Pastel Pink', 1, 1, 'Female'),
+('Topwear', 'Satin Dress', 'White', 1, 1, 'Female'),
+('Topwear', 'Satin Dress', 'Pastel Blue', 1, 1, 'Female'),
+('Topwear', 'Lacy Crop Top', 'White', 1, 1, 'Female'),
+('Topwear', 'Lacy Crop Top', 'Peach', 1, 1, 'Female'),
+('Topwear', 'Lacy Crop Top', 'Lavender', 1, 1, 'Female'),
+('Topwear', 'Backless Corset Top', 'Light Pink', 1, 1, 'Female'),
+('Topwear', 'Backless Corset Top', 'Pastel Green', 1, 1, 'Female'),
+('Bottomwear', 'Bell Bottoms', 'Light Blue', 1, 1, 'Female'),
+('Bottomwear', 'Bell Bottoms', 'Dark Blue', 1, 1, 'Female'),
+('Bottomwear', ' A-Line mini Skirt', 'White', 1, 1, 'Female'),
+('Bottomwear', 'A-Line mini Skirt', 'Light Pink', 1, 1, 'Female'),
+('Footwear', 'White Pointed Heels', 'White', 1, 1, 'Female'),
+('Footwear', 'Black Pointed Heels', 'Black', 1, 1, 'Female'),
+('Footwear', 'Beige Pointed Heels', 'Beige', 1, 1, 'Female'),
+('Accessories', 'White Handbag', 'White', 1, 1, 'Female'),
+('Accessories', 'Pastel Pink Handbag', 'Pastel Pink', 1, 1, 'Female'),
+('Accessories', 'Beige Handbag', 'Beige', 1, 1, 'Female'),
+('Accessories', 'Pearl Stud Earrings', 'White', 1, 1, 'Female'),
+('Accessories', 'Gold Hoop Earrings', 'Gold', 1, 1, 'Female'),
+('Topwear', 'Satin Shirt', 'Pastel Pink', 1, 1, 'Male'),
+('Topwear', 'Soft Knit Sweater', 'Lavender', 1, 1, 'Male'),
+('Topwear', 'V-Neck Knit Top', 'Baby Blue', 1, 1, 'Male'),
+('Topwear', 'Casual Blazer', 'Light Blue', 1, 1, 'Male'),
+('Topwear', 'Chiffon Shirt', 'Light Green', 1, 1, 'Male'),
+('Topwear', 'Oversized Striped Shirt', 'White & Stripes', 1, 1, 'Male'),
+('Topwear', 'Solid Shirt', 'White', 1, 1, 'Male'),
+('Topwear', 'Solid Shirt', 'Beige', 1, 1, 'Male'),
+('Bottomwear', 'Linen Pants', 'White', 1, 1, 'Male'),
+('Bottomwear', 'Linen Pants', 'Beige', 1, 1, 'Male'),
+('Bottomwear', 'Wide-Leg Jeans', 'Light Blue', 1, 1, 'Male'),
+('Bottomwear', 'Wide-Leg Jeans', 'Dark Blue', 1, 1, 'Male'),
+('Bottomwear', 'Wide-Leg Jeans', 'White', 1, 1, 'Male'),
+('Bottomwear', 'Tailored Trousers', 'Beige', 1, 1, 'Male'),
+('Bottomwear', 'Slim-Fit Chinos', 'White', 1, 1, 'Male'),
+('Footwear', 'Sneakers', 'White', 1, 1, 'Male'),
+('Footwear', 'Sneakers', 'Beige', 1, 1, 'Male'),
+('Footwear', 'Oxfords', 'Light Brown', 1, 1, 'Male'),
+('Footwear', 'Moccasins', 'White', 1, 1, 'Male'),
+('Footwear', 'Moccasins', 'Beige', 1, 1, 'Male'),
+('Topwear', 'Floral Crop Top', 'Pastel Pink', 1, 3, 'Female'),
+('Topwear', 'Floral Crop Top', 'Pastel Lavender', 1, 3, 'Female'),
+('Topwear', 'Floral Crop Top', 'Pastel Blue', 1, 3, 'Female'),
+('Topwear', 'Tube Top', 'Pastel Pink', 1, 3, 'Female'),
+('Topwear', 'Tube Top', 'Pastel Blue', 1, 3, 'Female'),
+('Topwear', 'Solid Fitted Crop Top', 'Pastel Pink', 1, 3, 'Female'),
+('Topwear', 'Solid Fitted Crop Top', 'Pastel Blue', 1, 3, 'Female'),
+('Topwear', 'Solid Fitted Crop Top', 'Pastel White', 1, 3, 'Female'),
+('Topwear', 'A-Line Summer Dress', 'Pastel Pink', 1, 3, 'Female'),
+('Topwear', 'A-Line Summer Dress', 'Pastel Blue', 1, 3, 'Female'),
+('Topwear', 'Floral Dress', 'Pastel Pink', 1, 3, 'Female'),
+('Topwear', 'Floral Dress', 'White', 1, 3, 'Female'),
+('Topwear', 'Floral Dress', 'Pastel Yellow', 1, 3, 'Female'),
+('Bottomwear', 'Light Blue Denim Shorts', 'Light Blue', 1, 3, 'Female'),
+('Bottomwear', 'White Denim Shorts', 'White', 1, 3, 'Female'),
+('Bottomwear', 'White Denim Pants', 'White', 1, 3, 'Female'),
+('Bottomwear', 'Light Blue Denim Pants', 'Light Blue', 1, 3, 'Female'),
+('Footwear', 'White Sandals', 'White', 1, 3, 'Female'),
+('Footwear', 'Pink Sandals', 'Pink', 1, 3, 'Female'),
+('Footwear', 'White Flats', 'White', 1, 3, 'Female'),
+('Footwear', 'Beige Sneakers', 'Beige', 1, 3, 'Female'),
+('Footwear', 'White Sneakers', 'White', 1, 3, 'Female'),
+('Footwear', 'Light Blue Sneakers', 'Light Blue', 1, 3, 'Female'),
+('Accessories', 'White Handbag', 'White', 1, 3, 'Female'),
+('Accessories', 'Silver Chain Necklace', 'Silver', 1, 3, 'Female'),
+('Accessories', 'Pearl Stud Earrings', 'White', 1, 3, 'Female'),
+('Accessories', 'Pearl Necklace/Pendant', 'White', 1, 3, 'Female'),
+('Accessories', 'Rose Gold Dainty Necklace', 'Rose Gold', 1, 3, 'Female'),
+('Accessories', 'Rose Gold Bracelet', 'Rose Gold', 1, 3, 'Female'),
+('Topwear', 'Hoodie', 'Pastel Blue', 1, 3, 'Male'),
+('Topwear', 'Casual Shirt', 'Pastel Green', 1, 3, 'Male'),
+('Topwear', 'Hoodie', 'Pastel Pink', 1, 3, 'Male'),
+('Topwear', 'Oversized Casual T-shirt', 'White', 1, 3, 'Male'),
+('Topwear', 'Oversized Casual T-shirt', 'Pastel Blue', 1, 3, 'Male'),
+('Topwear', 'Oversized Casual T-shirt', 'Light Pink', 1, 3, 'Male'),
+('Topwear', 'Hoodie', 'White', 1, 3, 'Male'),
+('Bottomwear', 'Joggers', 'White', 1, 3, 'Male'),
+('Bottomwear', 'Joggers', 'Grey', 1, 3, 'Male'),
+('Bottomwear', 'Joggers', 'Black', 1, 3, 'Male'),
+('Bottomwear', 'Joggers', 'Beige', 1, 3, 'Male'),
+('Bottomwear', 'Denim Jeans', 'Light Blue', 1, 3, 'Male'),
+('Bottomwear', 'Shorts', 'Pastel Pink', 1, 3, 'Male'),
+('Bottomwear', 'Linen Shorts', 'White', 1, 3, 'Male'),
+('Bottomwear', 'Denim Shorts', 'Light Blue', 1, 3, 'Male'),
+('Footwear', 'Sneakers', 'White', 1, 3, 'Male'),
+('Footwear', 'Slip-Ons', 'Pastel Blue', 1, 3, 'Male'),
+('Footwear', 'Sneakers', 'White', 1, 3, 'Male'),
+('Accessories', 'Silver Chain Necklace', 'Silver', 1, 3, 'Male'),
+('Accessories', 'Cap', 'White', 1, 3, 'Male'),
+('Accessories', 'Cap', 'Black', 1, 3, 'Male'),
+('Topwear', 'Chiffon Blouse', 'Pastel Pink', 1, 2, 'Female'),
+('Topwear', 'Fitted Blazer', 'Light Blue', 1, 2, 'Female'),
+('Topwear', 'Button-Down Shirt', 'White', 1, 2, 'Female'),
+('Topwear', 'Cardigan', 'white', 1, 2, 'Female'),
+('Topwear', 'Pastel Blue V-neck Top', 'Pastel Blue', 1, 2, 'Female'),
+('Bottomwear', 'A-line long Skirt', 'White', 1, 2, 'Female'),
+('Bottomwear', 'High-Waisted Trousers', 'Beige', 1, 2, 'Female'),
+('Bottomwear', 'Slim-Fit Pants', 'Light Pink', 1, 2, 'Female'),
+('Bottomwear', 'Pencil Skirt', 'Light Blue', 1, 2, 'Female'),
+('Footwear', 'White Pumps', 'White', 1, 2, 'Female'),
+('Footwear', 'Beige Heels', 'Beige', 1, 2, 'Female'),
+('Footwear', 'Pastel Pink Flats', 'Pastel Pink', 1, 2, 'Female'),
+('Footwear', 'Pointed Heels', 'Light Blue', 1, 2, 'Female'),
+('Accessories', 'Pearl Earrings', 'White', 1, 2, 'Female'),
+('Accessories', 'Watch', 'Silver', 1, 2, 'Female'),
+('Accessories', 'Handbag', 'Beige', 1, 2, 'Female'),
+('Accessories', 'Necklace', 'Rose Gold', 1, 2, 'Female'),
+('Topwear', 'Shirt', 'White', 1, 2, 'Male'),
+('Topwear', 'Shirt', 'Light Blue', 1, 2, 'Male'),
+('Topwear', 'Blazer', 'Light Grey', 1, 2, 'Male'),
+('Topwear', 'Blazer', 'Pastel Blue', 1, 2, 'Male'),
+('Bottomwear', 'Trousers', 'Beige', 1, 2, 'Male'),
+('Bottomwear', 'Trousers', 'White', 1, 2, 'Male'),
+('Bottomwear', 'Trousers', 'Light Grey', 1, 2, 'Male'),
+('Footwear', 'Formal Shoes', 'White', 1, 2, 'Male'),
+('Footwear', 'Formal Shoes', 'Beige', 1, 2, 'Male'),
+('Accessories', 'Watch', 'Silver', 1, 2, 'Male'),
+('Accessories', 'Watch', 'Rose Gold', 1, 2, 'Male'),
+('Topwear', 'Chickenkaari Kurta', 'White', 1, 4, 'Female'),
+('Topwear', 'Chickenkaari Kurta', 'Lavender', 1, 4, 'Female'),
+('Topwear', 'Chickenkaari Kurta', 'Peach', 1, 4, 'Female'),
+('Topwear', 'Chickenkaari Kurta', 'Yellow', 1, 4, 'Female'),
+('Topwear', 'Saree', 'White Linen', 1, 4, 'Female'),
+('Topwear', 'Saree', 'Light Blue Chiffon', 1, 4, 'Female'),
+('Topwear', 'Saree', 'Peach Chiffon', 1, 4, 'Female'),
+('Topwear', 'Saree Blouse', 'White', 1, 4, 'Female'),
+('Topwear', 'Saree Blouse', 'Beige', 1, 4, 'Female'),
+('Bottomwear', 'Palazzo Pants', 'White', 1, 4, 'Female'),
+('Bottomwear','Sharara Pants', 'White', 1, 4, 'Female'),
+('Footwear', 'Kolhapuri Sandals', 'Beige', 1, 4, 'Female'),
+('Footwear', 'Embroidered Mojaris', 'White', 1, 4, 'Female'),
+('Footwear', 'Juttis', 'Gold', 1, 4, 'Female'),
+('Footwear', 'Beaded Flats', 'Pastel Pink', 1, 4, 'Female'),
+('Footwear', 'Block Heels', 'White', 1, 4, 'Female'),
+('Accessories', 'Circle Bindi', 'Black', 1, 4, 'Female'),
+('Accessories', 'Oxidized Jhumkas', 'Silver', 1, 4, 'Female'),
+('Accessories', 'Potli Bag', 'White', 1, 4, 'Female'),
+('Accessories', 'Pearl Earrings', 'White', 1, 4, 'Female'),
+('Topwear', 'Kurta', 'Pastel Pink', 1, 4, 'Male'),
+('Topwear', 'Short Kurta', 'Beige', 1, 4, 'Male'),
+('Topwear', 'Embroidered Kurta', 'White', 1, 4, 'Male'),
+('Bottomwear', 'Lungi', 'White', 1, 4, 'Male'),
+('Bottomwear', 'Dhoti Pants', 'Beige', 1, 4, 'Male'),
+('Bottomwear', 'Churidar', 'White', 1, 4, 'Male'),
+('Footwear', 'Kolhapuri Sandals', 'Brown', 1, 4, 'Male'),
+('Footwear', 'Mojaris', 'Beige', 1, 4, 'Male'),
+('Footwear', 'Ethnic Loafers', 'Cream', 1, 4, 'Male'),
+('Accessories', 'Rose Gold Watch', 'Rose Gold', 1, 4, 'Male'),
+('Accessories', 'Silver Watch', 'Silver', 1, 4, 'Male'),
+('Topwear', 'Evening Gown', 'Champagne', 2, 1, 'Female'),
+('Topwear', 'Silk Blouse', 'Ivory', 2, 1, 'Female'),
+('Topwear', 'Off-Shoulder Dress', 'Navy', 2, 1, 'Female'),
+('Topwear', 'Velvet Dress', 'Burgundy', 2, 1, 'Female'),
+('Topwear', 'Sequin Top', 'Silver', 2, 1, 'Female'),
+('Bottomwear', 'A-Line Skirt', 'Navy', 2, 1, 'Female'),
+('Bottomwear', 'Pleated Skirt', 'Black', 2, 1, 'Female'),
+('Bottomwear', 'Silk Trousers', 'Champagne', 2, 1, 'Female'),
+('Bottomwear', 'Tulle Skirt', 'Blush', 2, 1, 'Female'),
+('Bottomwear', 'Satin Slit Skirt', 'Black', 2, 1, 'Female'),
+('Footwear', 'Stiletto Heels', 'Black', 2, 1, 'Female'),
+('Footwear', 'Ballerina heels', 'Burgundy', 2, 1, 'Female'),
+('Footwear', 'Ballerina heels', 'Black', 2, 1, 'Female'),
+('Accessories', 'Pearl Necklace', 'Black', 2, 1, 'Female'),
+('Accessories', 'Clutch Bag', 'Rose Gold', 2, 1, 'Female'),
+('Accessories', 'Clutch Bag', 'Black', 2, 1, 'Female'),
+('Accessories', 'Necklace', 'Ruby', 2, 1, 'Female'),
+('Accessories', 'Necklace', 'Sapphire', 2, 1, 'Female'),
+('Topwear', 'Cashmere Sweater', 'Camel', 2, 3, 'Female'),
+('Topwear', 'Linen Shirt', 'White', 2, 3, 'Female'),
+('Topwear', 'Polo Shirt', 'Beige', 2, 3, 'Female'),
+('Topwear', 'Cable-Knit Sweater', 'Brown', 2, 3, 'Female'),
+('Topwear', 'Linen Shirt', 'Beige', 2, 3, 'Female'),
+('Bottomwear', 'Linen Shorts', 'White', 2, 3, 'Female'),
+('Bottomwear', 'Pleated Skirt', 'Brown', 2, 3, 'Female'),
+('Bottomwear', 'Linen pants', 'White', 2, 3, 'Female'),
+('Bottomwear', 'Linen Pants', 'Beige', 2, 3, 'Female'),
+('Bottomwear', 'Skorts', 'Beige', 2, 3, 'Female'),
+('Footwear', 'Espadrilles', 'Navy', 2, 3, 'Female'),
+('Footwear', 'Loafers', 'Brown', 2, 3, 'Female'),
+('Footwear', 'Loafers', 'Beige', 2, 3, 'Female'),
+('Accessories', 'Silk Scarf', 'Burgundy', 2, 3, 'Female'),
+('Accessories', 'Scarf', 'Brown', 2, 3, 'Female'),
+('Accessories', 'Scarf', 'Beige', 2, 3, 'Female'),
+('Accessories', 'Sunglasses', 'Black', 2, 3, 'Female'),
+('Topwear', 'Blazer', 'Grey', 2, 2, 'Female'),
+('Topwear', 'Button-Down Shirt', 'Beige', 2, 2, 'Female'),
+('Topwear', 'Button-Down Shirt', 'White', 2, 2, 'Female'),
+('Topwear', 'Button-Down Shirt', 'Olive', 2, 2, 'Female'),
+('Topwear', 'Cashmere Sweater', 'Navy', 2, 2, 'Female'),
+('Topwear', 'Silk Blouse', 'Ivory', 2, 2, 'Female'),
+('Bottomwear', 'Pencil Skirt', 'Black', 2, 2, 'Female'),
+('Bottomwear', 'Tailored Trousers', 'Navy', 2, 2, 'Female'),
+('Bottomwear', 'A-Line Skirt', 'Grey', 2, 2, 'Female'),
+('Bottomwear', 'Pleated Trousers', 'Beige', 2, 2, 'Female'),
+('Bottomwear', 'Pencil Skirt', 'Olive', 2, 2, 'Female'),
+('Accessories', 'Leather Tote Bag', 'Tan', 2, 2, 'Female'),
+('Accessories', 'Wristwatch', 'Silver', 2, 2, 'Female'),
+('Accessories', 'Stud', 'Rose Gold', 2, 2, 'Female'),
+('Footwear', 'Block Heels', 'Brown', 2, 2, 'Female'),
+('Footwear', 'Loafers', 'Black', 2, 2, 'Female'),
+('Footwear', 'Block Heels', 'Beige', 2, 2, 'Female'),
+('Topwear', 'Linen Kurta', 'White', 2, 4, 'Female'),
+('Topwear', 'Linen Kurta', 'Brown', 2, 4, 'Female'),
+('Topwear', 'Linen Kurta', 'Beige', 2, 4, 'Female'),
+('Topwear', 'Silk Kurta', 'White', 2, 4, 'Female'),
+('Topwear', 'Silk Kurta', 'Burgundy', 2, 4, 'Female'),
+('Topwear', 'Silk Kurta', 'Mauve', 2, 4, 'Female'),
+('Topwear', 'Embroidered Blouse', 'White', 2, 4, 'Female'),
+('Topwear', 'Embroidered Blouse', 'Olive Green', 2, 4, 'Female'),
+('Topwear', 'Embroidered Blouse', 'Rust Red', 2, 4, 'Female'),
+('Bottomwear', 'Silk Pants', 'White', 2, 4, 'Female'),
+('Bottomwear', 'Silk Pants', 'Beige', 2, 4, 'Female'),
+('Bottomwear', 'Silk Pants', 'Mauve', 2, 4, 'Female'),
+('Bottomwear', 'Linen Pants', 'Beige', 2, 4, 'Female'),
+('Bottomwear', 'Linen Pants', 'White', 2, 4, 'Female'),
+('Footwear', 'Flat Sandals', 'Brown', 2, 4, 'Female'),
+('Footwear', 'Kolhapuri Flats', 'Tan', 2, 4, 'Female'),
+('Accessory', 'Printed Dupatta', 'Beige', 2, 4, 'Female'),
+('Accessory', 'Silk Dupatta', 'Gold', 2, 4, 'Female'),
+('Accessory', 'Silk Dupatta', 'Off White', 2, 4, 'Female'),
+('Accessory', 'Oxidized Bracelet', 'Silver', 2, 4, 'Female'),
+('Accessory', 'Round Bindi', 'Black', 2, 4, 'Female'),
+('Accessory', 'Statement Earrings', 'Oxidized Silver', 2, 4, 'Female'),
+('Accessory', 'Statement Earrings', 'Oxidized Gold', 2, 4, 'Female'),
+('Topwear', 'French Cuff Shirt', 'Ivory', 2, 1, 'Male'),
+('Topwear', 'Classic Poplin Shirt', 'Sky Blue', 2, 1, 'Male'),
+('Topwear', 'Spread Collar Dress Shirt', 'White', 2, 1, 'Male'),
+('Topwear', 'Wingtip Collar Shirt', 'Pale Blue', 2, 1, 'Male'),
+('Topwear', 'Pinstripe Dress Shirt', 'White with Grey Stripes', 2, 1, 'Male'),
+('Topwear', 'Tuxedo Jacket', 'Black', 2, 1, 'Male'),
+('Topwear', 'Dinner Jacket', 'Midnight Blue', 2, 1, 'Male'),
+('Topwear', 'Silk Dress Shirt', 'White', 2, 1, 'Male'),
+('Topwear', 'Velvet Blazer', 'Burgundy', 2, 1, 'Male'),
+('Topwear', 'Double-Breasted Blazer', 'Charcoal', 2, 1, 'Male'),
+('Bottomwear', 'Tuxedo Trousers', 'Black', 2, 1, 'Male'),
+('Bottomwear', 'Formal Trousers', 'Midnight Blue', 2, 1, 'Male'),
+('Bottomwear', 'Wool Trousers', 'Grey', 2, 1, 'Male'),
+('Bottomwear', 'Pleated Trousers', 'Navy', 2, 1, 'Male'),
+('Footwear', 'Patent Leather Oxfords', 'Black', 2, 1, 'Male'),
+('Footwear', 'Velvet Loafers', 'Navy', 2, 1, 'Male'),
+('Accessories', 'Silk Bow Tie', 'Black', 2, 1, 'Male'),
+('Accessories', 'Cufflinks', 'Silver', 2, 1, 'Male'),
+('Topwear', 'Polo Shirt', 'White', 2, 3, 'Male'),
+('Topwear', 'Cable-Knit Sweater', 'Cream', 2, 3, 'Male'),
+('Topwear', 'Linen Shirt', 'Beige', 2, 3, 'Male'),
+('Topwear', 'Cashmere Sweater', 'Camel', 2, 3, 'Male'),
+('Topwear', 'Oxford Shirt', 'Light Blue', 2, 3, 'Male'),
+('Topwear', 'Linen Shirt', 'Brown', 2, 3, 'Male'),
+('Bottomwear', 'Chinos', 'Khaki', 2, 3, 'Male'),
+('Bottomwear', 'Linen Shorts', 'Beige', 2, 3, 'Male'),
+('Bottomwear', 'Dark-Wash Jeans', 'Navy', 2, 3, 'Male'),
+('Bottomwear', 'Pleated Shorts', 'White', 2, 3, 'Male'),
+('Bottomwear', 'Linen Shorts', 'Light Blue', 2, 3, 'Male'),
+('Footwear', 'Boat Shoes', 'Brown', 2, 3, 'Male'),
+('Footwear', 'Loafers', 'Tan', 2, 3, 'Male'),
+('Accessories', 'Sunglasses', 'Brown', 2, 3, 'Male'),
+('Accessories', 'Sunglasses', 'Black', 2, 3, 'Male'),
+('Topwear', 'Double-Breasted Blazer', 'Navy', 2, 2, 'Male'),
+('Topwear', 'Oxford Shirt', 'White', 2, 2, 'Male'),
+('Topwear', 'Cable Knit Sweater', 'Cream', 2, 2, 'Male'),
+('Topwear', 'Cashmere Turtleneck', 'Beige', 2, 2, 'Male'),
+('Topwear', 'Linen Dress Shirt', 'Sky Blue', 2, 2, 'Male'),
+('Bottomwear', 'High-Waisted Wool Trousers', 'Grey', 2, 2, 'Male'),
+('Bottomwear', 'Pleated Linen Trousers', 'Cream', 2, 2, 'Male'),
+('Bottomwear', 'Tailored Chinos', 'Beige', 2, 2, 'Male'),
+('Bottomwear', 'Corduroy Pants', 'Brown', 2, 2, 'Male'),
+('Bottomwear', 'Slim Fit Trousers', 'Navy', 2, 2, 'Male'),
+('Footwear', 'Loafers', 'Brown', 2, 2, 'Male'),
+('Footwear', 'Oxford Shoes', 'Black', 2, 2, 'Male'),
+('Footwear', 'Brogues', 'Tan', 2, 2, 'Male'),
+('Footwear', 'Monk Strap Shoes', 'Burgundy', 2, 2, 'Male'),
+('Footwear', 'Derby Shoes', 'Dark Brown', 2, 2, 'Male'),
+('Accessories', 'Silver Watch', 'Silver', 2, 2, 'Male'),
+('Accessories', 'Silk Tie', 'Navy', 2, 2, 'Male'),
+('Accessories', 'Pocket Square', 'White', 2, 2, 'Male'),
+('Accessories', 'Leather Belt', 'Brown', 2, 2, 'Male'),
+('Accessories', 'Silk Tie', 'Burgundy', 2, 2, 'Male'),
+('Accessories', 'Silk Tie', 'Beige', 2, 2, 'Male'),
+('Topwear', 'Kurta', 'Ivory', 2, 4, 'Male'),
+('Topwear', 'Bandhgala', 'Navy', 2, 4, 'Male'),
+('Topwear', 'Sherwani', 'Beige', 2, 4, 'Male'),
+('Topwear', 'Nehru Jacket', 'Grey', 2, 4, 'Male'),
+('Topwear', 'Silk Kurta', 'White', 2, 4, 'Male'),
+('Bottomwear', 'Churidar', 'White', 2, 4, 'Male'),
+('Bottomwear', 'Dhoti Pants', 'Beige', 2, 4, 'Male'),
+('Bottomwear', 'Linen Trousers', 'Cream', 2, 4, 'Male'),
+('Bottomwear', 'Silk Pajama', 'Ivory', 2, 4, 'Male'),
+('Footwear', 'Mojaris', 'Brown', 2, 4, 'Male'),
+('Footwear', 'Kolhapuri Sandals', 'Tan', 2, 4, 'Male');
+
+SET foreign_key_checks = 0;
+
+INSERT INTO ClothingItems (ItemType, ItemName, Color, AestheticID, OccasionID, SuitableGender) VALUES
+('Topwear', 'Graphic Tee', 'White', 4, 1, 'Male'),
+('Topwear', 'Oversized Jacket', 'Black', 4, 1, 'Male'),
+('Topwear', 'Printed Shirt', 'Navy Blue', 4, 1, 'Male'),
+('Topwear', 'Bomber Jacket', 'Olive Green', 4, 1, 'Male'),
+('Topwear', 'Mesh Shirt', 'Grey', 4, 1, 'Male'),
+('Topwear', 'Graphic Tee', 'Black', 4, 1, 'Male'),
+('Bottomwear', 'Distressed Jeans', 'Black', 4, 1, 'Male'),
+('Bottomwear', 'Baggy Trousers', 'Beige', 4, 1, 'Male'),
+('Bottomwear', 'Cargo Pants', 'Olive Green', 4, 1, 'Male'),
+('Bottomwear', 'Fitted Denim', 'Dark Blue', 4, 1, 'Male'),
+('Bottomwear', 'Cargo Pants', 'Black', 4, 1, 'Male'),
+('Footwear', 'Chunky Sneakers', 'White', 4, 1, 'Male'),
+('Footwear', 'High Top Sneakers', 'Black', 4, 1, 'Male'),
+('Footwear', 'Combat Boots', 'Brown', 4, 1, 'Male'),
+('Footwear', 'Chelsea Boots', 'Dark Grey', 4, 1, 'Male'),
+('Accessories', 'Chain Necklace', 'Silver', 4, 1, 'Male'),
+('Accessories', 'Rings Set', 'Black', 4, 1, 'Male'),
+('Accessories', 'Snapback Cap', 'White', 4, 1, 'Male'),
+('Accessories', 'Stud Earrings', 'Silver', 4, 1, 'Male'),
+('Topwear', 'Leather Jacket', 'Black', 4, 1, 'Female'),
+('Topwear', 'Corset Top', 'White', 4, 1, 'Female'),
+('Topwear', 'Mesh Top', 'Black', 4, 1, 'Female'),
+('Topwear', 'Graphic Crop Tee', 'Black', 4, 1, 'Female'),
+('Topwear', 'Halter Neck Top', 'Grey', 4, 1, 'Female'),
+('Topwear', 'Strappy Top', 'White', 4, 1, 'Female'),
+('Topwear', 'Oversized Graphic Shirt', 'Black', 4, 1, 'Female'),
+('Topwear', 'Off Shoulder Top', 'Grey', 4, 1, 'Female'),
+('Bottomwear', 'Faux Leather Pants', 'Black', 4, 1, 'Female'),
+('Bottomwear', 'Distressed Jeans', 'Grey', 4, 1, 'Female'),
+('Bottomwear', 'Mini Skirt', 'Black', 4, 1, 'Female'),
+('Bottomwear', 'Cargo Pants', 'Beige', 4, 1, 'Female'),
+('Bottomwear', 'High-Waisted Shorts', 'White', 4, 1, 'Female'),
+('Bottomwear', 'Cargo Pants', 'Black', 4, 1, 'Female'),
+('Footwear', 'Combat Boots', 'Black', 4, 1, 'Female'),
+('Footwear', 'Platform Sneakers', 'White', 4, 1, 'Female'),
+('Footwear', 'Ankle Boots', 'Grey', 4, 1, 'Female'),
+('Footwear', 'Heeled Sandals', 'Black', 4, 1, 'Female'),
+('Accessories', 'Chunky Chain Necklace', 'Silver', 4, 1, 'Female'),
+('Accessories', 'Stud Earrings', 'Black', 4, 1, 'Female'),
+('Accessories', 'Crossbody Bag', 'Black', 4, 1, 'Female'),
+('Accessories', 'Statement Ring', 'Silver', 4, 1, 'Female'),
+('Accessories', 'Wide Buckle Belt', 'Black', 4, 1, 'Female'),
+('Topwear', 'Oversized Hoodie', 'Grey', 4, 3, 'Female'),
+('Topwear', 'Graphic Tee', 'White', 4, 3, 'Female'),
+('Topwear', 'Plaid Shirt', 'Red', 4, 3, 'Female'),
+('Topwear', 'Crop Hoodie', 'Black', 4, 3, 'Female'),
+('Topwear', 'Denim Jacket', 'Blue', 4, 3, 'Female'),
+('Bottomwear', 'Distressed Skinny Jeans', 'Blue', 4, 3, 'Female'),
+('Bottomwear', 'Black Cargo Pants', 'Black', 4, 3, 'Female'),
+('Bottomwear', 'Black Denim Skirt', 'Black', 4, 3, 'Female'),
+('Bottomwear', 'Mom Jeans', 'Light Blue', 4, 3, 'Female'),
+('Footwear', 'White Sneakers', 'White', 4, 3, 'Female'),
+('Footwear', 'Black Combat Boots', 'Black', 4, 3, 'Female'),
+('Footwear', 'Slip-On Vans', 'Black', 4, 3, 'Female'),
+('Accessories', 'Crossbody Bag', 'Black', 4, 3, 'Female'),
+('Accessories', 'Sunglasses', 'Black', 4, 3, 'Female'),
+('Accessories', 'Gold Hoop Earrings', 'Gold', 4, 3, 'Female'),
+('Topwear', 'Button-Down Shirt', 'White', 4, 2, 'Female'),
+('Topwear', 'Sweater Vest', 'Grey', 4, 2, 'Female'),
+('Topwear', 'Plaid Blazer', 'Grey', 4, 2, 'Female'),
+('Topwear', 'Crop Blouse', 'Black', 4, 2, 'Female'),
+('Topwear', 'Striped Turtleneck', 'Black and White', 4, 2, 'Female'),
+('Bottomwear', 'Black High-Waisted Pants', 'Black', 4, 2, 'Female'),
+('Bottomwear', 'Plaid Skirt', 'Grey', 4, 2, 'Female'),
+('Bottomwear', 'White Trousers', 'White', 4, 2, 'Female'),
+('Bottomwear', 'Black Leather Skirt', 'Black', 4, 2, 'Female'),
+('Footwear', 'Black Loafers', 'Black', 4, 2, 'Female'),
+('Footwear', 'White Sneakers', 'White', 4, 2, 'Female'),
+('Footwear', 'Ankle Boots', 'Black', 4, 2, 'Female'),
+('Accessories', 'Silver Watch', 'Silver', 4, 2, 'Female'),
+('Accessories', 'Black Tote Bag', 'Black', 4, 2, 'Female'),
+('Accessories', 'Gold Hoop Earrings', 'Gold', 4, 2, 'Female'),
+('Topwear', 'Oversized Hoodie', 'Grey', 4, 3, 'Male'),
+('Topwear', 'Graphic Tee', 'Black', 4, 3, 'Male'),
+('Topwear', 'Plaid Shirt', 'Red', 4, 3, 'Male'),
+('Topwear', 'Denim Jacket', 'Blue', 4, 3, 'Male'),
+('Topwear', 'Black Hoodie', 'Black', 4, 3, 'Male'),
+('Bottomwear', 'Distressed Black Jeans', 'Black', 4, 3, 'Male'),
+('Bottomwear', 'Grey Joggers', 'Grey', 4, 3, 'Male'),
+('Bottomwear', 'Cargo Pants', 'Black', 4, 3, 'Male'),
+('Bottomwear', 'Cargo Pants', 'Olive', 4, 3, 'Male'),
+('Footwear', 'White Sneakers', 'White', 4, 3, 'Male'),
+('Footwear', 'Black Combat Boots', 'Black', 4, 3, 'Male'),
+('Footwear', 'Slip-On Vans', 'Black', 4, 3, 'Male'),
+('Accessories', 'Black Cap', 'Black', 4, 3, 'Male'),
+('Accessories', 'Sunglasses', 'Black', 4, 3, 'Male'),
+('Accessories', 'Silver Watch', 'Silver', 4, 3, 'Male'),
+('Topwear', 'Button-Down Shirt', 'White', 4, 2, 'Male'),
+('Topwear', 'Plaid Blazer', 'Grey', 4, 2, 'Male'),
+('Topwear', 'Graphic Tee', 'White', 4, 2, 'Male'),
+('Topwear', 'Slim Fit Turtleneck', 'Black', 4, 2, 'Male'),
+('Topwear', 'Denim Jacket', 'Blue', 4, 2, 'Male'),
+('Bottomwear', 'Black Chinos', 'Black', 4, 2, 'Male'),
+('Bottomwear', 'Grey Slim-Fit Jeans', 'Grey', 4, 2, 'Male'),
+('Bottomwear', 'Beige Linen Trousers', 'Beige', 4, 2, 'Male'),
+('Bottomwear', 'Plaid Trousers', 'Grey', 4, 2, 'Male'),
+('Footwear', 'Black Loafers', 'Black', 4, 2, 'Male'),
+('Footwear', 'Brown Leather Boots', 'Brown', 4, 2, 'Male'),
+('Footwear', 'Black Sneakers', 'Black', 4, 2, 'Male'),
+('Accessories', 'Silver Watch', 'Silver', 4, 2, 'Male'),
+('Accessories', 'Messenger Bag', 'Brown', 4, 2, 'Male'),
+('Accessories', 'Gold Necklace', 'Gold', 4, 2, 'Male');
+
+SET foreign_key_checks = 1;
+
+select *
+from OUTFITRECOMMENDATIONS;
+
+CREATE TABLE UserCredentials (
+    CredentialID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT,
+    FullName VARCHAR(100),
+    Email VARCHAR(100) UNIQUE,
+    Password VARCHAR(255),
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
