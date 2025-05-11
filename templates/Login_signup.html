@@ -107,7 +107,10 @@
         <div class="form-label">Signup</div>
         <form action="/signup" method="POST">
             <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="password" placeholder="Password" required
+       pattern="(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+       title="Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.">
+
             <button type="submit">Signup</button>
         </form>
     </div>

@@ -12,16 +12,25 @@ app.permanent_session_lifetime = timedelta(minutes=30)  # Set session timeout to
 
 mysql = MySQL(app)
 
+import re
+
+def is_strong_password(password):
+    return re.match(r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', password)
+
 # Route for login/signup page
 @app.route('/')
 def login_page():
     return render_template('Login_signup.html')
 
-# Route for signup
 @app.route('/signup', methods=['POST'])
 def signup():
     email = request.form['email']
     password = request.form['password']
+
+    if not is_strong_password(password):
+        flash('Password must be at least 8 characters long and include at least 1 uppercase letter, 1 number, and 1 special character.', 'danger')
+        return redirect(url_for('login_page'))
+
     hashed_password = generate_password_hash(password)  # Hash the password
 
     cur = mysql.connection.cursor()
@@ -29,29 +38,13 @@ def signup():
         cur.execute("INSERT INTO USER_Details (email, password) VALUES (%s, %s)", (email, hashed_password))
         mysql.connection.commit()
         flash('Signup successful! Please log in.', 'success')
-    except IntegrityError:  # Handle duplicate email error
+    except IntegrityError:
         flash('Email already exists. Please log in.', 'danger')
     finally:
         cur.close()
-    return redirect(url_for('login_page'))  # Redirect to login/signup page
 
-# Route for login
-@app.route('/login', methods=['POST'])
-def login():
-    email = request.form['email']
-    password = request.form['password']
+    return redirect(url_for('login_page'))
 
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT password FROM USER_Details WHERE email = %s", (email,))
-    user = cur.fetchone()
-    cur.close()
-
-    if user and check_password_hash(user[0], password):
-        session['email'] = email  # Store user session
-        return redirect(url_for('home'))  # Redirect to home page
-    else:
-        flash('Invalid email or password. Please try again.', 'danger')
-        return redirect(url_for('login_page'))
 
 # Route for home page
 @app.route('/home')
