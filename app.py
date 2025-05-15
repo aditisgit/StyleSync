@@ -27,6 +27,7 @@ def signup():
     email = request.form['email']
     password = request.form['password']
 
+
     if not is_strong_password(password):
         flash('Password must be at least 8 characters long and include at least 1 uppercase letter, 1 number, and 1 special character.', 'danger')
         return redirect(url_for('login_page'))
@@ -43,8 +44,25 @@ def signup():
     finally:
         cur.close()
 
-    return redirect(url_for('login_page'))
+    return redirect('/home')  # Redirect to the home page after signup
 
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    password = request.form['password']
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT password FROM USER_Details WHERE email = %s", (email,))
+    user = cur.fetchone()
+    cur.close()
+
+    if user and check_password_hash(user[0], password):  # Validate password
+        session['email'] = email  # Log the user in by storing their email in the session
+        flash('Login successful!', 'success')
+        return redirect(url_for('home'))  # Redirect to the home page
+    else:
+        flash('Invalid email or password. Please try again.', 'danger')
+        return redirect(url_for('login_page'))  # Redirect back to the login page
 
 # Route for home page
 @app.route('/home')
@@ -79,7 +97,7 @@ def get_recommendations():
     # Example: Return a response or render a new template
     return f"Recommendations for {gender}, {height}, {weight}, {skintone}, {bodytype}, {aesthetic}, {occasion}"
 
-@app.route('/recomendations')
+@app.route('/recommendations')
 def redirect_to_recommendations():
     return redirect(url_for('recommendations'))
 
