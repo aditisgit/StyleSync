@@ -107,6 +107,8 @@ ALTER TABLE ClothingItems
 ADD CONSTRAINT fk_clothingitems_occasion
 FOREIGN KEY (OccasionID) REFERENCES Occasions(OccasionID);
 
+
+
  
  select *
  from Aesthetics;
@@ -523,6 +525,54 @@ CREATE TABLE UserCredentials (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
+
+UPDATE Aesthetics SET AestheticName = 'Streetstyle' WHERE AestheticID = 3;
+
+UPDATE ClothingItems
+SET AestheticID = 3
+WHERE AestheticID = 4;
+
+show create table outfitrecommendations;
+
+SHOW INDEX FROM OutfitRecommendations;
+
+SELECT
+    CONSTRAINT_NAME,
+    COLUMN_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM
+    information_schema.KEY_COLUMN_USAGE
+WHERE
+    TABLE_NAME = 'OutfitRecommendations'
+    AND REFERENCED_TABLE_NAME IS NOT NULL;
+    
+    ALTER TABLE OutfitRecommendations
+    DROP FOREIGN KEY OutfitRecommendations_ibfk_3,  -- TopwearID FK
+    DROP FOREIGN KEY OutfitRecommendations_ibfk_4,  -- BottomwearID FK
+    DROP FOREIGN KEY OutfitRecommendations_ibfk_5,  -- FootwearID FK
+    DROP FOREIGN KEY OutfitRecommendations_ibfk_6,  -- AccessoryID FK
+    DROP COLUMN TopwearID,
+    DROP COLUMN BottomwearID,
+    DROP COLUMN FootwearID,
+    DROP COLUMN AccessoryID,
+    ADD Topwear VARCHAR(100),
+    ADD Bottomwear VARCHAR(100),
+    ADD Footwear VARCHAR(100),
+    ADD Accessory VARCHAR(100),
+    ADD Gender ENUM('Male', 'Female'),
+    ADD BodyType VARCHAR(50),
+    ADD SkinTone VARCHAR(50);
+    
+    select *
+    from outfitrecommendations;
+
+    
+    
+
+
+
+
 
 
 
