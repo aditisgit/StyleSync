@@ -565,7 +565,12 @@ WHERE
     ADD SkinTone VARCHAR(50);
     
     select *
-    from outfitrecommendations;
+    from users;
+    
+   
+    
+    
+    
 
     
     
