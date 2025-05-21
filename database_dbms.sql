@@ -567,15 +567,28 @@ WHERE
     select *
     from users;
     
-   
-    
-    
-    
-
-    
-    
-
-
+   SELECT 
+    o.RecommendationID,
+    o.Topwear,
+    o.Bottomwear,
+    o.Footwear,
+    o.Accessory,
+    a.AestheticName,
+    oc.OccasionName,
+    o.CreatedAt
+FROM 
+    OutfitRecommendations o
+JOIN Users u ON o.UserID = u.UserID
+JOIN Aesthetics a ON o.AestheticID = a.AestheticID
+JOIN Occasions oc ON o.OccasionID = oc.OccasionID
+WHERE 
+    u.Gender = @gender AND
+    u.Height = @height AND
+    u.Weight = @weight AND
+    u.SkinTone = @skinTone AND
+    u.BodyType = @bodyType AND
+    u.PreferredAestheticID = @aestheticID AND
+    u.OccasionID = @occasionID;
 
 
 
