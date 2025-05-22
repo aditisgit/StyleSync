@@ -107,8 +107,71 @@
             color: #FAFAFA; /* White text for better contrast */
             margin-bottom: 30px;
         }
+
+        .recommendation-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .recommendation-card {
+            background: rgba(255,255,255,0.97);
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(47,47,47,0.18);
+            padding: 32px 36px;
+            min-width: 260px;
+            max-width: 340px;
+            margin-bottom: 22px;
+            position: relative;
+            border: 1.5px solid #e0e0e0;
+            opacity: 0.98;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .recommendation-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 10px 36px rgba(127,179,213,0.22);
+        }
+        .recommendation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.95em;
+            color: #fff;
+            background: #7FB3D5;
+            margin-right: 6px;
+            margin-bottom: 4px;
+        }
+        .pill.occasion {
+            background: #F7CAC9;
+            color: #2F2F2F;
+        }
+        .recommendation-card ul {
+            padding-left: 18px;
+            margin-bottom: 10px;
+        }
+        .recommendation-card .meta {
+            font-size: 0.95em;
+            color: #888;
+        }
+
     </style>
 </head>
+<script>
+    function openDialog(id) {
+        document.getElementById('rec-dialog-' + id).showModal();
+    }
+    function closeDialog(id) {
+        document.getElementById('rec-dialog-' + id).close();
+    }
+</script>
+
 <body>
 
     <video autoplay muted loop class="video-bg">
@@ -126,74 +189,120 @@
     </nav>
 
     <section class="form-section">
-        <h2>Get Outfit Recommendations</h2>
+        <h2>Find Your Style</h2>
+        <form method="POST" action="{{ url_for('get_recommendations') }}">
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select name="gender" id="gender" required>
+                    <option value="">--Select--</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
 
-        <form method="POST" action="/get-recommendations">
-            <label for="gender">Gender:</label>
-            <select name="gender" id="gender" required>
-                <option value="">--Select--</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
+            <div class="form-group">
+                <label for="bodytype">Body Type:</label>
+                <select name="bodytype" id="bodytype" required>
+                    <option value="">--Select--</option>
+                    <option value="Rectangle">Rectangle</option>
+                    <option value="Triangle">Triangle</option>
+                    <option value="Inverted Triangle">Inverted Triangle</option>
+                    <option value="Hourglass">Hourglass</option>
+                    <option value="Oval">Oval</option>
+                    <option value="Pear">Pear</option>
+                </select>
+            </div>
 
-            <label for="height">Height:</label>
-            <select name="height" id="height" required>
-                <option value="">--Select--</option>
-                <option value="Short">Short</option>
-                <option value="Medium">Medium</option>
-                <option value="Tall">Tall</option>
-            </select>
+            <div class="form-group">
+                <label for="skintone">Skin Tone:</label>
+                <select name="skintone" id="skintone" required>
+                    <option value="">--Select--</option>
+                    <option value="Fair">Fair</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Olive">Olive</option>
+                    <option value="Dark">Dark</option>
+                </select>
+            </div>
 
-            <label for="weight">Weight:</label>
-            <select name="weight" id="weight" required>
-                <option value="">--Select--</option>
-                <option value="Underweight">Underweight</option>
-                <option value="Normal">Medium</option>
-                <option value="Overweight">Overweight</option>
-            </select>
+            <div class="form-group">
+                <label for="aesthetic">Aesthetic:</label>
+                <select name="aesthetic" id="aesthetic" required>
+                    <option value="1">Soft girl (pastel)</option>
+                    <option value="2">Old money (chic)</option>
+                    <option value="3">Streetstyle</option>
+                </select>
+            </div>
 
-            <label for="skintone">Skin Tone:</label>
-            <select name="skintone" id="skintone" required>
-                <option value="">--Select--</option>
-                <option value="Fair">Fair</option>
-                <option value="Medium">Medium</option>
-                <option value="Olive">Olive</option>
-                <option value="Dark">Dark</option>
-            </select>
+            <div class="form-group">
+                <label for="occasion">Occasion:</label>
+                <select name="occasion" id="occasion" required>
+                    <option value="1">Party</option>
+                    <option value="2">Work</option>
+                    <option value="3">Casual</option>
+                    <option value="4">Ethnic</option>
+                </select>
+            </div>
 
-            <label for="bodytype">Body Type:</label>
-            <select name="bodytype" id="bodytype" required>
-                <option value="">--Select--</option>
-                <option value="Rectangle">Ectomorph</option>
-                <option value="Oval">Mesomorph</option>
-                <option value="Inverted Triangle">Endomorph</option>
-                <option value="Hourglass">Hourglass</option>
-                <option value="Pear">Pear</option>
-                <option value="Apple">Apple</option>
-            </select>
-
-            <label for="aesthetic">Aesthetic:</label>
-            <select name="aesthetic" id="aesthetic" required>
-                <option value="">--Select--</option>
-                <option value="Minimalist">Minimalist</option>
-                <option value="Boho">Boho</option>
-                <option value="Chic">Chic</option>
-                <option value="Grunge">Grunge</option>
-            </select>
-
-            <label for="occasion">Occasion:</label>
-            <select name="occasion" id="occasion" required>
-                <option value="">--Select--</option>
-                <option value="1. Casual">Casual</option>
-                <option value="2. Formal">Formal</option>
-                <option value="3. Ethnic">Ethnic</option>
-                <option value="4. Party">Party</option>
-            </select>
-
-            <button type="submit">Submit</button>
+            <button type="submit">Get Recommendations</button>
         </form>
     </section>
 
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <section class="recommendations-section">
+    <div class="recommendation-grid">
+    {% if recommendations %}
+        {% for rec in recommendations %}
+            {% if rec.Topwear and rec.AestheticName %}
+            <div class="recommendation-card" onclick="openDialog('{{ loop.index0 }}')" style="cursor:pointer;">
+                <div class="recommendation-header">
+                    <span class="pill aesthetic">{{ rec.AestheticName }}</span>
+                    <span class="pill occasion">{{ rec.OccasionName }}</span>
+                </div>
+                <ul>
+                    <li><strong>Topwear:</strong> {{ rec.Topwear }}</li>
+                    <li><strong>Bottomwear:</strong> {{ rec.Bottomwear }}</li>
+                    <li><strong>Footwear:</strong> {{ rec.Footwear }}</li>
+                    <li><strong>Accessory:</strong> {{ rec.Accessory }}</li>
+                </ul>
+                <div class="meta">
+                    <span>{{ rec.Gender }}, {{ rec.BodyType }}, {{ rec.SkinTone }}</span>
+                </div>
+            </div>
+            <dialog id="rec-dialog-{{ loop.index0 }}" class="rec-dialog">
+                <h3>{{ rec.AestheticName }} | {{ rec.OccasionName }}</h3>
+                <ul>
+                    <li><strong>Topwear:</strong> {{ rec.Topwear }}</li>
+                    <li><strong>Bottomwear:</strong> {{ rec.Bottomwear }}</li>
+                    <li><strong>Footwear:</strong> {{ rec.Footwear }}</li>
+                    <li><strong>Accessory:</strong> {{ rec.Accessory }}</li>
+                </ul>
+                <div class="meta">
+                    <span>{{ rec.Gender }}, {{ rec.BodyType }}, {{ rec.SkinTone }}</span>
+                </div>
+                <button onclick="closeDialog('{{ loop.index0 }}')">Close</button>
+            </dialog>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p style="color:white;text-align:center;">No recommendations found. Try different options.</p>
+    {% endif %}
+    </div>
+</section>
+
 </body>
+<script>
+function openDialog(idx) {
+    document.getElementById('rec-dialog-' + idx).showModal();
+}
+function closeDialog(idx) {
+    document.getElementById('rec-dialog-' + idx).close();
+}
+</script>
 </html>
