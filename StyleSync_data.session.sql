@@ -645,15 +645,21 @@ ADD COLUMN Gender ENUM('Male', 'Female'),
 ADD COLUMN BodyType VARCHAR(50),
 ADD COLUMN SkinTone VARCHAR(50);
 
-SELECT 
-    o.Topwear, o.Bottomwear, o.Footwear, o.Accessory,
-    o.Gender, o.BodyType, o.SkinTone,
-    a.AestheticName, oc.OccasionName
-FROM OutfitRecommendations o
-JOIN Aesthetics a ON o.AestheticID = a.AestheticID
-JOIN Occasions oc ON o.OccasionID = oc.OccasionID
-WHERE o.Gender = %s
-  AND o.BodyType = %s
-  AND o.SkinTone = %s
-  AND o.AestheticID = %s
-  AND o.OccasionID = %s
+ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
+ALTER TABLE USER_details ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
+
+UPDATE USER_details SET is_admin = TRUE WHERE email = 'aditi@gmail';
+
+select * from USER_details;
+
+UPDATE USER_details SET is_admin = TRUE WHERE email = 'aditi@gmail';
+
+CREATE TABLE SavedCloset (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    Topwear VARCHAR(255),
+    Bottomwear VARCHAR(255),
+    Footwear VARCHAR(255),
+    Accessory VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES USER_details(id)
+);

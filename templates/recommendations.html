@@ -71,7 +71,7 @@
             box-shadow: 0 0 10px rgba(47, 47, 47, 0.3); /* Subtle shadow for visibility */
             max-width: 400px;
             width: 100%;
-            opacity: 0.9; /* Slightly transparent */
+            
         }
 
         form label {
@@ -218,8 +218,7 @@
                 <select name="skintone" id="skintone" required>
                     <option value="">--Select--</option>
                     <option value="Fair">Fair</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Olive">Olive</option>
+                    <option value="Brown">Brown</option>
                     <option value="Dark">Dark</option>
                 </select>
             </div>
@@ -274,6 +273,15 @@
                 <div class="meta">
                     <span>{{ rec.Gender }}, {{ rec.BodyType }}, {{ rec.SkinTone }}</span>
                 </div>
+                <!-- Save to Closet form START -->
+                <form action="{{ url_for('save_to_closet') }}" method="post" style="margin-top:10px;">
+                    <input type="hidden" name="Topwear" value="{{ rec.Topwear }}">
+                    <input type="hidden" name="Bottomwear" value="{{ rec.Bottomwear }}">
+                    <input type="hidden" name="Footwear" value="{{ rec.Footwear }}">
+                    <input type="hidden" name="Accessory" value="{{ rec.Accessory }}">
+                    <button type="submit" class="btn btn-primary">Save to Closet</button>
+                </form>
+                <!-- Save to Closet form END -->
             </div>
             <dialog id="rec-dialog-{{ loop.index0 }}" class="rec-dialog">
                 <h3>{{ rec.AestheticName }} | {{ rec.OccasionName }}</h3>

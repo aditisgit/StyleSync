@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Closet | StyleSync</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Add the background image below */
+            background: url("{{ url_for('static', filename='videos/FinalCloset.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            background-color: #f5f6fa; /* fallback color */
+        }
+
+        header {
+            background-color: #2f3640;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #00a8ff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .closet-item {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .closet-item h3 {
+            margin-top: 0;
+        }
+
+        .closet-item p {
+            margin: 5px 0;
+        }
+
+        .delete-form {
+            margin-top: 10px;
+        }
+
+        .delete-form button {
+            background-color: #e84118;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-form button:hover {
+            background-color: #c23616;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>StyleSync</h1>
+        <nav>
+            <a href="{{ url_for('home') }}" style="color:white; margin-right: 20px;">Home</a>
+            <a href="{{ url_for('recommendations') }}" style="color:white; margin-right: 20px;">Recommendations</a>
+            <a href="{{ url_for('logout') }}" style="color:white;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>My Closet</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% if closet_items %}
+            {% for item in closet_items %}
+                <div class="closet-item">
+                    <h3>Outfit</h3>
+                    <p><strong>Topwear:</strong> {{ item.Topwear }}</p>
+                    <p><strong>Bottomwear:</strong> {{ item.Bottomwear }}</p>
+                    <p><strong>Footwear:</strong> {{ item.Footwear }}</p>
+                    <p><strong>Accessory:</strong> {{ item.Accessory }}</p>
+
+                    <form class="delete-form" action="{{ url_for('delete_from_closet', item_id=item.id) }}" method="post">
+                        <button type="submit">Remove from Closet</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>You haven't saved any outfits yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
